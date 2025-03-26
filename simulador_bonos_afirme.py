@@ -352,7 +352,7 @@ if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
 
         if aplica:
             bono = polizas_amplia * 100 + polizas_limitada * 50
-            explicacion.append(f"✅ Bono calculado: ${polizas_amplia} x $100 + ${polizas_limitada} x $50 = {formatear_pesos(bono)}")
+            explicacion.append(f"✅ Bono calculado: {polizas_amplia} x $100 + {polizas_limitada} x $50 = {formatear_pesos(bono)}")
         else:
             bono = 0
 
@@ -394,7 +394,7 @@ if tipo_bono == "Bono de Siniestralidad en Ramos Especiales":
             mensaje = "✅ Aplica bono completo del 100% por siniestralidad < 30%."
         elif siniestralidad < 50:
             porcentaje_bono = 50
-            mensaje = "✅ Aplica bono parcial del 50% por siniestralidad entre 30% y 49.99%."
+            mensaje = "✅ Aplica bono parcial del 50% por siniestralidad entre 30.1% y 49.9%."
         else:
             mensaje = "❌ No aplica bono por siniestralidad ≥ 50%."
 
