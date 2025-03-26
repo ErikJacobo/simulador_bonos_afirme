@@ -359,36 +359,60 @@ if tipo_bono == "Nueva Recluta: Autos, Daños o Vida":
 # =========================
 if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
     prima_total = st.number_input("Prima neta total anual Autos ($)", min_value=0.0, format="%.2f")
-    polizas_amplia = st.number_input("Número de pólizas Cobertura Amplia", min_value=0, step=1)
-    polizas_limitada = st.number_input("Número de pólizas Cobertura Limitada", min_value=0, step=1)
     es_nueva_recluta = st.checkbox("¿Es nueva recluta?")
+    siniestralidad = None
+    polizas_amplia = 0
+    polizas_limitada = 0
+
+    if es_nueva_recluta:
+        siniestralidad = st.number_input("Siniestralidad anual Autos (%)", min_value=0.0, max_value=100.0, format="%.2f")
+    else:
+        polizas_amplia = st.number_input("Número de pólizas Cobertura Amplia", min_value=0, step=1)
+        polizas_limitada = st.number_input("Número de pólizas Cobertura Limitada", min_value=0, step=1)
 
     calcular = st.button("Calcular Bono de Buena Siniestralidad")
 
     if calcular:
         explicacion = []
-        aplica = False
+        bono = 0
 
-        if es_nueva_recluta and prima_total >= 1360000:
-            aplica = True
-            explicacion.append("✅ Es nueva recluta y cumple con prima mínima de $1,360,000.")
-        elif not es_nueva_recluta and prima_total >= 1700000:
-            aplica = True
-            explicacion.append("✅ Cumple con prima mínima de $1,700,000.")
-        else:
-            explicacion.append("❌ No cumple con la prima mínima requerida para aplicar al bono de siniestralidad.")
+        if es_nueva_recluta:
+            if prima_total >= 1360000:
+                if siniestralidad < 40:
+                    bono_pct = 5.0
+                elif siniestralidad < 50:
+                    bono_pct = 4.0
+                elif siniestralidad < 55.1:
+                    bono_pct = 3.0
+                elif siniestralidad < 60:
+                    bono_pct = 2.5
+                elif siniestralidad <= 63:
+                    bono_pct = 1.0
+                else:
+                    bono_pct = 0
 
-        if aplica:
-            bono = polizas_amplia * 100 + polizas_limitada * 50
-            explicacion.append(f"✅ Bono calculado: {polizas_amplia} x $100 + {polizas_limitada} x $50 = {formatear_pesos(bono)}")
+                bono = prima_total * bono_pct / 100
+                if bono_pct > 0:
+                    explicacion.append(f"✅ Nueva recluta: Aplica bono del {bono_pct}% por siniestralidad de {siniestralidad:.2f}%.")
+                else:
+                    explicacion.append("❌ No aplica bono: Siniestralidad mayor al 63%.")
+            else:
+                explicacion.append("❌ No alcanza prima mínima de $1,360,000 como nueva recluta.")
         else:
-            bono = 0
+            if prima_total >= 1700000:
+                bono = polizas_amplia * 100 + polizas_limitada * 50
+                explicacion.append(f"✅ Bono calculado: {polizas_amplia} x $100 + {polizas_limitada} x $50 = {formatear_pesos(bono)}")
+            else:
+                explicacion.append("❌ No alcanza prima mínima de $1,700,000.")
 
         st.markdown(f"### 🧾 Resultados para {agente}")
         st.write("**Datos Ingresados:**")
         st.write(f"- Prima total anual Autos: {formatear_pesos(prima_total)}")
-        st.write(f"- Pólizas Amplia: {polizas_amplia}")
-        st.write(f"- Pólizas Limitada: {polizas_limitada}")
+        if es_nueva_recluta:
+            st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
+        else:
+            st.write(f"- Pólizas Amplia: {polizas_amplia}")
+            st.write(f"- Pólizas Limitada: {polizas_limitada}")
 
         st.write("**Resultado del Bono:**")
         st.write(f"- Total Bono: {formatear_pesos(bono)}")
@@ -400,6 +424,7 @@ if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
 
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
+
 
 # =========================
 # Bono de Siniestralidad en Ramos Especiales
