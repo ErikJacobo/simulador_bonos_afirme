@@ -227,19 +227,19 @@ if tipo_bono == "Vida Grupo":
 
         tramos_vida = [
             (400001, float('inf'), 3.0),
-            (300001, 400000, 2.5),
-            (200001, 300000, 2.0),
-            (100001, 200000, 1.5),
-            (50000, 100000, 1.0)
+            (300001, 400001, 2.5),
+            (200001, 300001, 2.0),
+            (100001, 200001, 1.5),
+            (50000, 100001, 1.0)
         ]
 
         for minimo, maximo, pct in tramos_vida:
-            if minimo <= prima_vida <= maximo:
+            if minimo <= prima_vida < maximo:
                 porcentaje_bono = pct
                 break
 
         if porcentaje_bono > 0:
-            explicacion.append(f"✅ Aplica bono del {porcentaje_bono:.1f}% por estar en el rango correspondiente.")
+            explicacion.append(f"✅ Aplica bono del {porcentaje_bono:.1f}% por estar en el rango de prima correspondiente.")
         else:
             explicacion.append("❌ No alcanza el rango mínimo de prima ($50,000) para aplicar al bono.")
 
@@ -251,7 +251,7 @@ if tipo_bono == "Vida Grupo":
 
         st.write("**Resultado del Bono:**")
         st.write(f"- Porcentaje Bono Aplicado: {porcentaje_bono:.1f}%")
-        st.write(f"- Total Bono: {formatear_pesos(total_bono)}")
+        st.success(f"🟢 Total del Bono: {formatear_pesos(total_bono)}")
 
         st.markdown("---")
         st.subheader("Explicación:")
@@ -260,7 +260,7 @@ if tipo_bono == "Vida Grupo":
 
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
-        
+
 # =========================
 # Sección Nueva Recluta
 # =========================
