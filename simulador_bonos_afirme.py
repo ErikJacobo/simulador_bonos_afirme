@@ -262,62 +262,88 @@ if tipo_bono == "Vida Grupo":
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
 # =========================
-# Sección Nueva Recluta
+# Bono Nueva Recluta: Autos, Daños o Vida
 # =========================
 if tipo_bono == "Nueva Recluta: Autos, Daños o Vida":
-    ramo = st.selectbox("Selecciona el ramo de nueva recluta:", ["Autos", "Daños", "Vida Grupo"])
-    produccion = st.number_input(f"Producción 2025 {ramo} ($)", min_value=0.0, format="%.2f")
-    calcular = st.button("Calcular Bono Nueva Recluta")
+    ramo_recluta = st.selectbox("Selecciona el ramo:", ["Autos", "Daños", "Vida Grupo"], key="recluta_ramo")
+    prima_recluta = st.number_input(f"Prima neta 2025 ({ramo_recluta})", min_value=0.0, format="%.2f", key="prima_recluta")
 
-    if calcular:
-        porcentaje_bono = 0
+    if ramo_recluta in ["Autos", "Daños"]:
+        siniestralidad_recluta = st.number_input("Siniestralidad (%)", min_value=0.0, max_value=100.0, format="%.2f")
+
+    calcular_recluta = st.button("Calcular Bono Nueva Recluta")
+
+    if calcular_recluta:
+        bono_pct = 0
         explicacion = []
 
-        if ramo == "Autos":
+        if ramo_recluta == "Autos":
             tramos = [
-                (1400001, 6.5),
-                (780001, 5.5),
-                (570001, 4.5),
-                (380001, 4.0),
-                (220001, 3.0),
-                (110001, 2.0),
+                (1120001, float('inf'), 6.5, 5.5, 4.5),
+                (624001, 1120000, 5.5, 4.5, 3.5),
+                (456001, 624000, 4.5, 3.5, 2.5),
+                (304001, 456000, 4.0, 3.0, 2.0),
+                (176001, 304000, 3.0, 2.0, 1.0),
+                (88000, 176000, 2.0, 1.0, 0.0)
             ]
-            minimo = 110001
-        elif ramo == "Daños":
+            for minimo, maximo, pct1, pct2, pct3 in tramos:
+                if minimo <= prima_recluta <= maximo:
+                    if siniestralidad_recluta < 60:
+                        bono_pct = pct1
+                        explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)} con siniestralidad < 60%.")
+                    elif siniestralidad_recluta <= 75:
+                        bono_pct = pct2
+                        explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)} con siniestralidad entre 60% y 75%.")
+                    else:
+                        bono_pct = pct3
+                        explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)} con siniestralidad mayor al 75%.")
+                    break
+
+        elif ramo_recluta == "Daños":
             tramos = [
-                (650001, 6.0),
-                (410001, 5.0),
-                (290001, 4.0),
-                (125001, 3.0),
-                (75001, 2.0),
+                (520001, float('inf'), 6.0, 5.0),
+                (328001, 520000, 5.0, 4.0),
+                (232001, 328000, 4.0, 3.0),
+                (100001, 232000, 3.0, 2.0),
+                (60000, 100000, 2.0, 1.0)
             ]
-            minimo = 75001
-        elif ramo == "Vida Grupo":
+            for minimo, maximo, pct1, pct2 in tramos:
+                if minimo <= prima_recluta <= maximo:
+                    if siniestralidad_recluta < 50:
+                        bono_pct = pct1
+                        explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)} con siniestralidad < 50%.")
+                    else:
+                        bono_pct = pct2
+                        explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)} con siniestralidad ≥ 50%.")
+                    break
+
+        elif ramo_recluta == "Vida Grupo":
             tramos = [
-                (320001, 3.0),
-                (240001, 2.5),
-                (160001, 2.0),
-                (80001, 1.5),
+                (320001, float('inf'), 3.0),
+                (240001, 320000, 2.5),
+                (160001, 240000, 2.0),
+                (80001, 160000, 1.5)
             ]
-            minimo = 80001
+            for minimo, maximo, pct in tramos:
+                if minimo <= prima_recluta <= maximo:
+                    bono_pct = pct
+                    explicacion.append(f"✅ Prima entre {formatear_pesos(minimo)} y {formatear_pesos(maximo)}.")
+                    break
 
-        for minimo_rango, pct in tramos:
-            if produccion >= minimo_rango:
-                porcentaje_bono = pct * 1.25  # Potenciado 125%
-                explicacion.append(f"✅ Aplica bono nueva recluta potenciado (125%) del {porcentaje_bono:.2f}% por producción ≥ ${minimo_rango:,}.")
-                break
+        if bono_pct == 0:
+            explicacion.append("❌ No se alcanzó la prima mínima requerida para aplicar al bono en este ramo.")
 
-        if produccion < minimo:
-            explicacion.append(f"❌ Producción insuficiente. Se requiere mínimo ${minimo:,} en el ramo {ramo}.")
+        total_bono = prima_recluta * bono_pct / 100
 
-        total_bono = porcentaje_bono * produccion / 100
-
-        st.markdown(f"### 🧾 Resultados para {agente} - Nueva Recluta {ramo}")
+        st.markdown(f"### 🧾 Resultados para {agente}")
         st.write("**Datos Ingresados:**")
-        st.write(f"- Producción 2025 {ramo}: {formatear_pesos(produccion)}")
+        st.write(f"- Ramo: {ramo_recluta}")
+        st.write(f"- Prima 2025: {formatear_pesos(prima_recluta)}")
+        if ramo_recluta in ["Autos", "Daños"]:
+            st.write(f"- Siniestralidad: {siniestralidad_recluta:.2f}%")
 
         st.write("**Resultado del Bono:**")
-        st.write(f"- Bono Aplicado (125%): {porcentaje_bono:.2f}%")
+        st.write(f"- Bono Aplicado: {bono_pct:.2f}%")
         st.success(f"🟢 Total del Bono: {formatear_pesos(total_bono)}")
 
         st.markdown("---")
