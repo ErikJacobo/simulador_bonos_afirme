@@ -215,50 +215,52 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
 # =========================
-# Sección Vida Grupo
+# Bono Vida Grupo
 # =========================
 if tipo_bono == "Vida Grupo":
-    produccion_vida = st.number_input("Producción Vida Grupo 2025 ($)", min_value=0.0, format="%.2f")
-    calcular = st.button("Calcular Bono")
+    prima_vida = st.number_input("Prima neta 2025 Vida Grupo ($)", min_value=0.0, format="%.2f")
+    calcular = st.button("Calcular Bono Vida Grupo")
 
     if calcular:
         porcentaje_bono = 0
         explicacion = []
 
-        tramos = [
-            (320001, 3.0),
-            (240001, 2.5),
-            (160001, 2.0),
-            (80001, 1.5),
+        tramos_vida = [
+            (400001, float('inf'), 3.0),
+            (300001, 400000, 2.5),
+            (200001, 300000, 2.0),
+            (100001, 200000, 1.5),
+            (50000, 100000, 1.0)
         ]
 
-        for minimo, pct in tramos:
-            if produccion_vida >= minimo:
+        for minimo, maximo, pct in tramos_vida:
+            if minimo <= prima_vida <= maximo:
                 porcentaje_bono = pct
-                explicacion.append(f"✅ Aplica bono del {pct}% por producción ≥ ${minimo:,}.")
                 break
 
-        if produccion_vida < 80001:
-            explicacion.append("❌ No alcanza producción mínima de $80,001 para aplicar bono.")
+        if porcentaje_bono > 0:
+            explicacion.append(f"✅ Aplica bono del {porcentaje_bono:.1f}% por estar en el rango correspondiente.")
+        else:
+            explicacion.append("❌ No alcanza el rango mínimo de prima ($50,000) para aplicar al bono.")
 
-        total_bono = porcentaje_bono * produccion_vida / 100
+        total_bono = porcentaje_bono * prima_vida / 100
 
-        st.markdown(f"### 🧾 Resultados para {agente}:")
+        st.markdown(f"### 🧾 Resultados para {agente}")
         st.write("**Datos Ingresados:**")
-        st.write(f"- Producción 2025 Vida Grupo: {formatear_pesos(produccion_vida)}")
+        st.write(f"- Prima Vida Grupo: {formatear_pesos(prima_vida)}")
 
         st.write("**Resultado del Bono:**")
-        st.write(f"- Bono Aplicado: {porcentaje_bono:.2f}%")
-        st.success(f"🟢 Total del Bono: {formatear_pesos(total_bono)}")
+        st.write(f"- Porcentaje Bono Aplicado: {porcentaje_bono:.1f}%")
+        st.write(f"- Total Bono: {formatear_pesos(total_bono)}")
 
         st.markdown("---")
-        st.subheader("Explicaciones:")
+        st.subheader("Explicación:")
         for e in explicacion:
             st.write(e)
 
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
-
+        
 # =========================
 # Sección Nueva Recluta
 # =========================
