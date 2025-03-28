@@ -1,22 +1,11 @@
-# Simulador de Bonos Afirme 2025 en Streamlit
-import streamlit as st
-
-# Función para aplicar formato de miles con pesos
-def formatear_pesos(valor):
-    try:
-        valor = float(valor)
-        return "$ {:,.2f}".format(valor)
-    except:
-        return "$ 0.00"
-
-st.set_page_config(page_title="Simulador Bonos Afirme 2025", layout="centered")
-
-# Simulador de Bonos Afirme 2025 en Streamlit
 import streamlit as st
 from PIL import Image
 import base64
 from io import BytesIO
 
+# Esta línea debe ir aquí inmediatamente
+st.set_page_config(page_title="Simulador Bonos Afirme 2025", layout="centered")
+
 # Función para aplicar formato de miles con pesos
 def formatear_pesos(valor):
     try:
@@ -25,10 +14,8 @@ def formatear_pesos(valor):
     except:
         return "$ 0.00"
 
-st.set_page_config(page_title="Simulador Bonos Afirme 2025", layout="centered")
-
 # Mostrar logo en esquina superior derecha con títulos centrados
-logo = Image.open("link logo.jpg")  # Asegúrate que el archivo esté en la misma carpeta
+logo = Image.open("link logo.jpg")  # Asegúrate que esté en la carpeta correcta
 buffered = BytesIO()
 logo.save(buffered, format="PNG")
 img_base64 = base64.b64encode(buffered.getvalue()).decode()
@@ -47,6 +34,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 # Títulos centrados
 st.markdown("""
