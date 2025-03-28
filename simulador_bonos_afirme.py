@@ -53,12 +53,13 @@ st.markdown("---")
 # Autos (Producción y Crecimiento)
 # =========================
 if tipo_bono == "Autos (Producción y Crecimiento)":
-   st.subheader("Autos (Producción y Crecimiento)")
+    st.subheader("Autos (Producción y Crecimiento)")
     produccion_2024 = st.number_input("Producción 2024 Autos ($)", min_value=0.0, format="%.2f")
     produccion_2025 = st.number_input("Producción 2025 Autos ($)", min_value=0.0, format="%.2f")
     siniestralidad = st.number_input("Siniestralidad Autos (%)", min_value=0.0, max_value=100.0, format="%.2f")
 
     calcular = st.button("Calcular Bono de Autos")
+
 
     if calcular:
         bono_produccion = 0
