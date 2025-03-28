@@ -36,13 +36,6 @@ st.markdown(
 )
 
 
-# Títulos centrados
-st.markdown("""
-    <div style='text-align: center;'>
-        <h1>Simulador de Bonos</h1>
-        <h2>Afirme 2025</h2>
-    </div>
-""", unsafe_allow_html=True)
 
 st.markdown("---")
 agente = st.text_input("Nombre del Agente")
