@@ -154,11 +154,12 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
 
     calcular = st.button("Calcular Bono Daños")
 
+    crecimiento_real = 0  # Inicialización por seguridad
+
     if calcular:
         explicacion = []
         bono_produccion = 0
         bono_crecimiento = 0
-        crecimiento_real = 0
 
         # Cálculo de Producción
         tramos_produccion_danos = [
@@ -205,7 +206,7 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
                         bono_crecimiento = pct_10
                         explicacion.append(f"✅ Aplica bono de crecimiento del {pct_10}% por crecimiento ≥ 10%.")
                     else:
-                        explicacion.append(f"❌ No aplica bono de crecimiento. Se requiere al menos 10% de crecimiento.")
+                        explicacion.append("❌ No aplica bono de crecimiento. Se requiere al menos 10% de crecimiento.")
                     break
         else:
             explicacion.append("❌ Producción 2024 no registrada. No se puede calcular crecimiento.")
@@ -213,29 +214,27 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
         # Total
         total_bono = (bono_produccion + bono_crecimiento) * produccion_2025 / 100
 
-      # RESULTADOS
-st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
-st.write("**📊 Datos Ingresados:**")
-st.write(f"- Producción 2024 Autos: {formatear_pesos(produccion_2024)}")
-st.write(f"- Producción 2025 Autos: {formatear_pesos(produccion_2025)}")
-st.write(f"- Crecimiento: {crecimiento:.2f}%")
-st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
+        # Resultados
+        st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
+        st.write("**📊 Datos Ingresados:**")
+        st.write(f"- Producción Daños 2024: {formatear_pesos(produccion_2024)}")
+        st.write(f"- Producción Daños 2025: {formatear_pesos(produccion_2025)}")
+        st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
+        st.write(f"- Crecimiento Real: {crecimiento_real:.2f}%")
 
-st.write("**💵 Resultados de Bono:**")
+        st.write("**💵 Resultado del Bono:**")
+        st.write(f"📈 Bono de Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
+        st.write(f"🚀 Bono de Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
 
-# Producción
-st.write(f"📈 **Bono de Producción:** {bono_produccion:.2f}% ➜ {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
+        st.success(f"🧾 Total del Bono Daños: {formatear_pesos(total_bono)}")
 
-# Crecimiento
-st.write(f"🚀 **Bono de Crecimiento:** {bono_crecimiento:.2f}% ➜ {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
+        st.markdown("---")
+        st.subheader("📌 Explicación del Cálculo:")
+        for e in explicacion:
+            st.write(f"- {e}")
 
-# Total
-st.success(f"📋 **Total del Bono Autos: {formatear_pesos(total_bono)}**")
-
-st.markdown("---")
-st.subheader("📌 Explicaciones:")
-for e in explicacion:
-    st.write(f"- {e}")
+        st.markdown("---")
+        st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
 
 # =========================
