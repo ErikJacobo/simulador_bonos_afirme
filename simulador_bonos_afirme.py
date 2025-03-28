@@ -87,7 +87,7 @@ if tipo_bono == "Autos (Producción y Crecimiento)":
                     if pct3 > 0:
                         explicacion.append(f"✅ Aplica bono de producción del {pct3}% por siniestralidad ≥ 75%.")
                     else:
-                        explicacion.append("❌ Siniestralidad ≥ 75%. No aplica bono de producción en este rango.")
+                        explicacion.append("❌ Siniestralidad ≥ 75%. No aplica bono de producción.")
                 break
         else:
             explicacion.append("❌ No alcanza el mínimo de producción de $110,000 para aplicar a bono de producción.")
@@ -124,14 +124,14 @@ if tipo_bono == "Autos (Producción y Crecimiento)":
         total_bono = (bono_produccion + bono_crecimiento) * produccion_2025 / 100
 
         # RESULTADOS
-        st.markdown(f"### 🧾 Resultado para {agente.upper()}:")
+        st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
         st.write("**📊 Datos Ingresados:**")
         st.write(f"- Producción 2024 Autos: {formatear_pesos(produccion_2024)}")
         st.write(f"- Producción 2025 Autos: {formatear_pesos(produccion_2025)}")
         st.write(f"- Crecimiento: {crecimiento:.2f}%")
         st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
 
-        st.write("**💵 Resultados del Bono:**")
+        st.write("**💵 Resultados de Bono:**")
         st.write(f"📈 Bono de Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
         st.write(f"🚀 Bono de Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
 
@@ -141,6 +141,9 @@ if tipo_bono == "Autos (Producción y Crecimiento)":
         st.subheader("📌 Explicación:")
         for e in explicacion:
             st.write(e)
+
+        st.markdown("---")
+        st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
 
 # =========================
@@ -236,6 +239,54 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
+# =========================
+# Bono Vida Grupo
+# =========================
+if tipo_bono == "Vida Grupo":
+    st.subheader("Vida Grupo")
+    produccion_vida = st.number_input("Producción 2025 Vida Grupo ($)", min_value=0.0, format="%.2f")
+    calcular = st.button("Calcular Bono Vida Grupo")
+
+    if calcular:
+        porcentaje_bono = 0
+        explicacion = []
+
+        tramos_vida = [
+            (400001, float('inf'), 3.0),
+            (300001, 400000, 2.5),
+            (200001, 300000, 2.0),
+            (100001, 200000, 1.5),
+            (50000, 100000, 1.0)
+        ]
+
+        for minimo, maximo, pct in tramos_vida:
+            if minimo <= produccion_vida <= maximo:
+                porcentaje_bono = pct
+                explicacion.append(f"✅ Producción dentro del rango para bono del {pct}%.")
+                break
+
+        if porcentaje_bono == 0:
+            explicacion.append("❌ No alcanza el mínimo de $50,000 para aplicar a bono de producción.")
+
+        total_bono = porcentaje_bono * produccion_vida / 100
+
+        # Resultados
+        st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
+        st.write("**📊 Datos Ingresados:**")
+        st.write(f"- Producción 2025 Vida Grupo: {formatear_pesos(produccion_vida)}")
+
+        st.write("**💵 Resultado del Bono:**")
+        st.write(f"📈 Bono Aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
+
+        st.success(f"🧾 Total del Bono Vida Grupo: {formatear_pesos(total_bono)}")
+
+        st.markdown("---")
+        st.subheader("📌 Explicación:")
+        for e in explicacion:
+            st.write(f"- {e}")
+
+        st.markdown("---")
+        st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
 
 # =========================
 # Nueva Recluta: Autos, Daños o Vida
@@ -306,12 +357,11 @@ if tipo_bono == "Nueva Recluta: Autos, Daños o Vida":
             for minimo, maximo, pct in tabla_vida:
                 if minimo <= prima <= maximo:
                     porcentaje_bono = pct
-                    explicacion.append(f"✅ Prima dentro del rango para {pct}%")
+                    explicacion.append(f"✅ Prima dentro del rango para bono del {pct}%")
                     break
 
         total_bono = porcentaje_bono * prima / 100
 
-        # RESULTADOS
         st.markdown(f"### 🧾 Resultados para {agente.upper()}")
         st.write("**📊 Datos Ingresados:**")
         st.write(f"- Ramo seleccionado: {ramo_recluta}")
@@ -321,11 +371,9 @@ if tipo_bono == "Nueva Recluta: Autos, Daños o Vida":
 
         st.write("**💵 Resultado del Bono:**")
         if porcentaje_bono > 0:
-            st.write(f"🏅 Bono aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
-            st.success(f"🧾 Total del Bono Nueva Recluta: {formatear_pesos(total_bono)}")
+            st.success(f"✅ Bono Aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
         else:
             st.error("❌ No aplica bono con los datos ingresados.")
-            st.info("💰 Total del Bono: $0.00")
 
         st.markdown("---")
         st.subheader("📌 Explicaciones:")
@@ -389,14 +437,13 @@ if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
         if es_nueva_recluta:
             if porcentaje_bono > 0:
                 total_bono = porcentaje_bono * prima_total / 100
-                st.write(f"🏅 Bono aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
-                st.success(f"🧾 Total del Bono: {formatear_pesos(total_bono)}")
+                st.success(f"✅ Bono aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
             else:
                 total_bono = 0
                 st.error("❌ No aplica bono.")
         else:
             if prima_total >= 1_700_000:
-                st.success("✅ Aplica bono directo por pólizas")
+                st.success("✅ Bono directo aplicado por pólizas")
                 st.info(f"💰 Total del Bono: {formatear_pesos(bono)}")
             else:
                 st.error("❌ No aplica bono.")
@@ -447,10 +494,9 @@ if tipo_bono == "Bono de Siniestralidad en Ramos Especiales":
 
         st.write("**💵 Resultado del Bono:**")
         if porcentaje_bono > 0:
-            st.write(f"🏅 Bono aplicado: {porcentaje_bono}%")
+            st.success(f"✅ Bono Aplicado: {porcentaje_bono:.0f}% del total de prima")
         else:
-            st.write("❌ Bono no aplica.")
-        st.success(f"🧾 Total del Bono: {formatear_pesos(porcentaje_bono)}")  # Puedes adaptar esto si hay fórmula real
+            st.error("❌ No aplica bono con los datos ingresados.")
 
         st.markdown("---")
         st.subheader("📌 Explicación:")
