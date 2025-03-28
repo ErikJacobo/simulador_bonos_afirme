@@ -213,26 +213,29 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
         # Total
         total_bono = (bono_produccion + bono_crecimiento) * produccion_2025 / 100
 
-        # Resultados
-        st.markdown(f"### 🧾 Resultado para {agente.upper()}:")
-        st.write("**📊 Datos Ingresados:**")
-        st.write(f"- Producción 2024: {formatear_pesos(produccion_2024)}")
-        st.write(f"- Producción 2025: {formatear_pesos(produccion_2025)}")
-        st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
-        st.write(f"- Crecimiento Real: {crecimiento_real:.2f}%")
+      # RESULTADOS
+st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
+st.write("**📊 Datos Ingresados:**")
+st.write(f"- Producción 2024 Autos: {formatear_pesos(produccion_2024)}")
+st.write(f"- Producción 2025 Autos: {formatear_pesos(produccion_2025)}")
+st.write(f"- Crecimiento: {crecimiento:.2f}%")
+st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
 
-        st.write("**💵 Resultados del Bono:**")
-        st.write(f"📈 Bono Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
-        st.write(f"🚀 Bono Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
-        st.success(f"🧾 Total del Bono Daños: {formatear_pesos(total_bono)}")
+st.write("**💵 Resultados de Bono:**")
 
-        st.markdown("---")
-        st.subheader("📌 Explicación del Cálculo:")
-        for e in explicacion:
-            st.write(e)
+# Producción
+st.write(f"📈 **Bono de Producción:** {bono_produccion:.2f}% ➜ {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
 
-        st.markdown("---")
-        st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
+# Crecimiento
+st.write(f"🚀 **Bono de Crecimiento:** {bono_crecimiento:.2f}% ➜ {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
+
+# Total
+st.success(f"📋 **Total del Bono Autos: {formatear_pesos(total_bono)}**")
+
+st.markdown("---")
+st.subheader("📌 Explicaciones:")
+for e in explicacion:
+    st.write(f"- {e}")
 
 
 # =========================
