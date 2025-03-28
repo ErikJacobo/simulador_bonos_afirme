@@ -60,7 +60,6 @@ if tipo_bono == "Autos (Producción y Crecimiento)":
 
     calcular = st.button("Calcular Bono de Autos")
 
-
     if calcular:
         bono_produccion = 0
         bono_crecimiento = 0
@@ -125,23 +124,24 @@ if tipo_bono == "Autos (Producción y Crecimiento)":
         total_bono = (bono_produccion + bono_crecimiento) * produccion_2025 / 100
 
         # RESULTADOS
-        st.markdown(f"### 🧾 Resultados para {agente.upper()}:")
-        st.write("**Datos Ingresados:**")
+        st.markdown(f"### 🧾 Resultado para {agente.upper()}:")
+        st.write("**📊 Datos Ingresados:**")
         st.write(f"- Producción 2024 Autos: {formatear_pesos(produccion_2024)}")
         st.write(f"- Producción 2025 Autos: {formatear_pesos(produccion_2025)}")
         st.write(f"- Crecimiento: {crecimiento:.2f}%")
         st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
 
-        st.write("**Resultados del Bono:**")
-        st.write(f"- Bono de Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
-        st.write(f"- Bono de Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
+        st.write("**💵 Resultados del Bono:**")
+        st.write(f"📈 Bono de Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
+        st.write(f"🚀 Bono de Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
 
-        st.success(f"💰 Total del Bono: {formatear_pesos(total_bono)}")
+        st.success(f"🧾 Total del Bono Autos: {formatear_pesos(total_bono)}")
 
         st.markdown("---")
         st.subheader("📌 Explicación:")
         for e in explicacion:
             st.write(e)
+
 
 # =========================
 # Daños (Producción y Crecimiento)
@@ -214,25 +214,26 @@ if tipo_bono == "Daños (Producción y Crecimiento)":
         total_bono = (bono_produccion + bono_crecimiento) * produccion_2025 / 100
 
         # Resultados
-        st.markdown(f"### 🧾 Resultados para {agente}")
-        st.write("**Datos Ingresados:**")
+        st.markdown(f"### 🧾 Resultado para {agente.upper()}:")
+        st.write("**📊 Datos Ingresados:**")
         st.write(f"- Producción 2024: {formatear_pesos(produccion_2024)}")
         st.write(f"- Producción 2025: {formatear_pesos(produccion_2025)}")
         st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
         st.write(f"- Crecimiento Real: {crecimiento_real:.2f}%")
 
-        st.write("**Resultado del Bono:**")
-        st.write(f"- Bono Producción: {bono_produccion:.2f}%")
-        st.write(f"- Bono Crecimiento: {bono_crecimiento:.2f}%")
-        st.success(f"🟢 Total del Bono: {formatear_pesos(total_bono)}")
+        st.write("**💵 Resultados del Bono:**")
+        st.write(f"📈 Bono Producción: {bono_produccion:.2f}% → {formatear_pesos(bono_produccion * produccion_2025 / 100)}")
+        st.write(f"🚀 Bono Crecimiento: {bono_crecimiento:.2f}% → {formatear_pesos(bono_crecimiento * produccion_2025 / 100)}")
+        st.success(f"🧾 Total del Bono Daños: {formatear_pesos(total_bono)}")
 
         st.markdown("---")
-        st.subheader("Explicación del Cálculo:")
+        st.subheader("📌 Explicación del Cálculo:")
         for e in explicacion:
             st.write(e)
 
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
+
 
 # =========================
 # Nueva Recluta: Autos, Daños o Vida
@@ -308,22 +309,24 @@ if tipo_bono == "Nueva Recluta: Autos, Daños o Vida":
 
         total_bono = porcentaje_bono * prima / 100
 
+        # RESULTADOS
         st.markdown(f"### 🧾 Resultados para {agente.upper()}")
-        st.write("**Datos Ingresados:**")
+        st.write("**📊 Datos Ingresados:**")
         st.write(f"- Ramo seleccionado: {ramo_recluta}")
         st.write(f"- Prima 2025: {formatear_pesos(prima)}")
         if ramo_recluta in ["Autos", "Daños"]:
             st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
 
-        st.write("**Resultado del Bono:**")
+        st.write("**💵 Resultado del Bono:**")
         if porcentaje_bono > 0:
-            st.success(f"✅ Bono aplicado: {porcentaje_bono:.2f}%")
+            st.write(f"🏅 Bono aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
+            st.success(f"🧾 Total del Bono Nueva Recluta: {formatear_pesos(total_bono)}")
         else:
             st.error("❌ No aplica bono con los datos ingresados.")
-        st.info(f"💰 Total del Bono: {formatear_pesos(total_bono)}")
+            st.info("💰 Total del Bono: $0.00")
 
         st.markdown("---")
-        st.subheader("Explicaciones:")
+        st.subheader("📌 Explicaciones:")
         for e in explicacion:
             st.write(f"- {e}")
 
@@ -375,17 +378,17 @@ if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
                 explicacion.append("❌ No cumple con la prima mínima de $1,700,000 para bono anual tradicional.")
 
         st.markdown(f"### 🧾 Resultados para {agente.upper()}")
-        st.write("**Datos Ingresados:**")
+        st.write("**📊 Datos Ingresados:**")
         st.write(f"- Prima total anual Autos: {formatear_pesos(prima_total)}")
         st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
         st.write(f"- Tipo de agente: {'Nueva Recluta' if es_nueva_recluta else 'Agente Regular'}")
 
-        st.write("**Resultado del Bono:**")
+        st.write("**💵 Resultado del Bono:**")
         if es_nueva_recluta:
             if porcentaje_bono > 0:
                 total_bono = porcentaje_bono * prima_total / 100
-                st.success(f"✅ Aplica bono del {porcentaje_bono:.2f}%")
-                st.info(f"💰 Total del Bono: {formatear_pesos(total_bono)}")
+                st.write(f"🏅 Bono aplicado: {porcentaje_bono:.2f}% → {formatear_pesos(total_bono)}")
+                st.success(f"🧾 Total del Bono: {formatear_pesos(total_bono)}")
             else:
                 total_bono = 0
                 st.error("❌ No aplica bono.")
@@ -398,7 +401,7 @@ if tipo_bono == "Bono Anual por Buena Siniestralidad Autos":
                 bono = 0
 
         st.markdown("---")
-        st.subheader("Explicación:")
+        st.subheader("📌 Explicación:")
         for e in explicacion:
             st.write(f"- {e}")
 
@@ -436,18 +439,21 @@ if tipo_bono == "Bono de Siniestralidad en Ramos Especiales":
             explicacion.append("❌ Siniestralidad igual o mayor a 50%. No aplica bono.")
 
         st.markdown(f"### 🧾 Resultados para {agente.upper()}")
-        st.write("**Datos Ingresados:**")
+        st.write("**📊 Datos Ingresados:**")
         st.write(f"- Ramo: {ramo}")
         st.write(f"- Siniestralidad: {siniestralidad:.2f}%")
 
-        st.write("**Resultado del Bono:**")
-        st.write(f"- Porcentaje Bono Aplicado: {porcentaje_bono}%")
+        st.write("**💵 Resultado del Bono:**")
+        if porcentaje_bono > 0:
+            st.write(f"🏅 Bono aplicado: {porcentaje_bono}%")
+        else:
+            st.write("❌ Bono no aplica.")
+        st.success(f"🧾 Total del Bono: {formatear_pesos(porcentaje_bono)}")  # Puedes adaptar esto si hay fórmula real
 
         st.markdown("---")
-        st.subheader("Explicación:")
+        st.subheader("📌 Explicación:")
         for e in explicacion:
             st.write(f"- {e}")
 
         st.markdown("---")
         st.markdown("<div style='text-align: center; color: gray;'>Aplican restricciones y condiciones conforme al cuaderno oficial de Afirme Seguros 2025.</div>", unsafe_allow_html=True)
-
