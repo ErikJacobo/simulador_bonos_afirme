@@ -3,7 +3,7 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-# Esta línea debe ir aquí inmediatamente
+# Esta línea debe ser lo primero
 st.set_page_config(page_title="Simulador Bonos Afirme 2025", layout="centered")
 
 # Función para aplicar formato de miles con pesos
@@ -15,11 +15,12 @@ def formatear_pesos(valor):
         return "$ 0.00"
 
 # Mostrar logo en esquina superior derecha con títulos centrados
-logo = Image.open("link logo.jpg")  # Asegúrate que esté en la carpeta correcta
+logo = Image.open("link logo.jpg")  # Asegúrate que el archivo esté en la misma carpeta
 buffered = BytesIO()
 logo.save(buffered, format="PNG")
 img_base64 = base64.b64encode(buffered.getvalue()).decode()
 
+# Encabezado con logo a la derecha
 st.markdown(
     f"""
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -35,10 +36,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-
+# Campos iniciales
 st.markdown("---")
 agente = st.text_input("Nombre del Agente")
+
 tipo_bono = st.selectbox("Selecciona ramo/sección a calcular:", [
     "Autos (Producción y Crecimiento)",
     "Daños (Producción y Crecimiento)",
@@ -48,6 +49,7 @@ tipo_bono = st.selectbox("Selecciona ramo/sección a calcular:", [
     "Nueva Recluta: Autos, Daños o Vida"
 ])
 st.markdown("---")
+
 
 # =========================
 # Autos (Producción y Crecimiento)
