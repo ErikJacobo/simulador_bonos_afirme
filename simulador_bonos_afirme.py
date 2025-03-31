@@ -39,7 +39,7 @@ st.markdown(
 
 st.markdown("---")
 agente = st.text_input("Nombre del Agente")
-tipo_ramo = st.selectbox("Selecciona ramo/sección a calcular:", [
+tipo_bono = st.selectbox("Selecciona ramo/sección a calcular:", [
     "Autos (Producción y Crecimiento)",
     "Daños (Producción y Crecimiento)",
     "Vida Grupo",
